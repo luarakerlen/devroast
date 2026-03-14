@@ -11,11 +11,17 @@ import styles from './style/home.module.css';
 export default function Home() {
   const [code, setCode] = useState('');
   const [roastMode, setRoastMode] = useState(true);
+  const [language, setLanguage] = useState<string | null>(null);
 
   return (
     <div className={styles.main}>
       <HeroTitle />
-      <CodeInputArea code={code} onCodeChange={setCode} />
+      <CodeInputArea
+        code={code}
+        onCodeChange={setCode}
+        language={language}
+        onLanguageChange={setLanguage}
+      />
       <ActionsBar
         code={code}
         roastMode={roastMode}
