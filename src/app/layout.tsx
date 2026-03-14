@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import './globals.css';
+import './style/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
-import styles from './navbar.module.css';
+import styles from './style/navbar.module.css';
 
 export const metadata: Metadata = {
   title: 'DevRoast',
