@@ -1,0 +1,37 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.critical {
+  color: var(--accent-red);
+}
+
+.warning {
+  color: var(--accent-amber);
+}
+
+.good {
+  color: var(--accent-green);
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.dotCritical {
+  background-color: var(--accent-red);
+}
+
+.dotWarning {
+  background-color: var(--accent-amber);
+}
+
+.dotGood {
+  background-color: var(--accent-green);
+}

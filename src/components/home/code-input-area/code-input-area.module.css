@@ -1,0 +1,80 @@
+.container {
+  width: 780px;
+  height: 360px;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  background-color: var(--bg-input);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  height: 40px;
+  border-bottom: 1px solid var(--border-primary);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  gap: 8px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dotRed {
+  background-color: var(--accent-red);
+}
+
+.dotYellow {
+  background-color: var(--accent-amber);
+}
+
+.dotGreen {
+  background-color: var(--accent-green);
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+.lineNumbers {
+  width: 48px;
+  border-right: 1px solid var(--border-primary);
+  background-color: var(--bg-surface);
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.lineNumber {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  height: 22px;
+  line-height: 22px;
+}
+
+.textarea {
+  flex: 1;
+  padding: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #a0a0a0;
+  background-color: transparent;
+  resize: none;
+  border: none;
+  outline: none;
+  line-height: 22px;
+  overflow: auto;
+}
+
+.textarea::placeholder {
+  color: var(--text-tertiary);
+}

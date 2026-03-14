@@ -1,0 +1,47 @@
+.root {
+  display: flex;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 8px 16px;
+  gap: 8px;
+}
+
+.removed {
+  background-color: #1a0a0a;
+}
+
+.added {
+  background-color: #0a1a0f;
+}
+
+.context {
+  background-color: transparent;
+}
+
+.prefix {
+  width: 16px;
+}
+
+.prefixRemoved {
+  color: var(--accent-red);
+}
+
+.prefixAdded {
+  color: var(--accent-green);
+}
+
+.prefixContext {
+  color: #71717a;
+}
+
+.contentRemoved {
+  color: #a1a1aa;
+}
+
+.contentAdded {
+  color: #fafafa;
+}
+
+.contentContext {
+  color: #a1a1aa;
+}

@@ -1,0 +1,49 @@
+.container {
+  width: 560px;
+  border: 1px solid #27272a;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.header {
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #27272a;
+  background-color: #09090b;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotRed {
+  background-color: var(--accent-red);
+}
+
+.dotYellow {
+  background-color: var(--accent-amber);
+}
+
+.dotGreen {
+  background-color: var(--accent-green);
+}
+
+.filename {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #71717a;
+}
+
+.content {
+  background-color: #18181b;
+  padding: 12px;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 14px;
+}

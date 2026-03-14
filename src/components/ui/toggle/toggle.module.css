@@ -1,0 +1,67 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.button {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  padding: 3px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s;
+  display: flex;
+  align-items: center;
+}
+
+.button:focus-visible {
+  box-shadow: 0 0 0 2px var(--bg-page), 0 0 0 4px var(--accent-green);
+}
+
+.button:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.buttonOff {
+  background-color: transparent;
+  border: 1px solid #3f3f46;
+}
+
+.buttonOn {
+  background-color: var(--accent-green);
+}
+
+.knob {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+
+.knobOff {
+  background-color: #71717a;
+  transform: translateX(0);
+}
+
+.knobOn {
+  background-color: var(--bg-page);
+  transform: translateX(18px);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  transition: color 0.15s;
+}
+
+.labelOff {
+  color: #71717a;
+}
+
+.labelOn {
+  color: var(--accent-green);
+}
