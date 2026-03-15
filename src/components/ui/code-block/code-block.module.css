@@ -1,5 +1,4 @@
 .root {
-  width: 560px;
   border: 1px solid var(--border-primary);
   border-radius: var(--radius-md);
   overflow: hidden;
