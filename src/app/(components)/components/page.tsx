@@ -4,11 +4,24 @@ import { useState } from 'react';
 import { BadgeDot, BadgeLabel, BadgeRoot } from '@/components/ui/badge/badge';
 import { Button } from '@/components/ui/button/button';
 import {
+  CardDescription,
+  CardHeader,
+  CardRoot,
+  CardTitle,
+} from '@/components/ui/card/card';
+import {
   DiffLineContent,
   DiffLinePrefix,
   DiffLineRoot,
 } from '@/components/ui/diff-line/diff-line';
 import { ScoreRing } from '@/components/ui/score-ring/score-ring';
+import {
+  TableRow,
+  TableRowCode,
+  TableRowLang,
+  TableRowRank,
+  TableRowScore,
+} from '@/components/ui/table-row/table-row';
 import { Toggle } from '@/components/ui/toggle/toggle';
 import { CodeBlockDemo } from './code-block-demo/code-block-demo';
 import styles from './components.module.css';
@@ -126,6 +139,54 @@ export default function ComponentsPage() {
               <ScoreRing score={7} maxScore={10} />
               <ScoreRing score={3.5} maxScore={10} />
               <ScoreRing score={0} maxScore={10} />
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Card</h2>
+          <div className={styles.componentShowcase}>
+            <div className={styles.cardRow}>
+              <CardRoot>
+                <CardHeader variant="critical">
+                  <span>critical</span>
+                </CardHeader>
+                <CardTitle>using var instead of const/let</CardTitle>
+                <CardDescription>
+                  the var keyword is function-scoped rather than block-scoped,
+                  which can lead to unexpected behavior and bugs.
+                </CardDescription>
+              </CardRoot>
+              <CardRoot>
+                <CardHeader variant="warning">
+                  <span>warning</span>
+                </CardHeader>
+                <CardTitle>missing error handling</CardTitle>
+                <CardDescription>
+                  this function does not handle potential errors or edge cases
+                  properly.
+                </CardDescription>
+              </CardRoot>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Table Row</h2>
+          <div className={styles.componentShowcase}>
+            <div className={styles.tableRowContainer}>
+              <TableRow>
+                <TableRowRank>#1</TableRowRank>
+                <TableRowScore>2.1</TableRowScore>
+                <TableRowCode>nested_callback_hell.js</TableRowCode>
+                <TableRowLang>javascript</TableRowLang>
+              </TableRow>
+              <TableRow>
+                <TableRowRank>#2</TableRowRank>
+                <TableRowScore>3.4</TableRowScore>
+                <TableRowCode>magic_numbers.py</TableRowCode>
+                <TableRowLang>python</TableRowLang>
+              </TableRow>
             </div>
           </div>
         </section>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import './style/globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
+import { TRPCProvider } from '~/server/trpc/client';
 import styles from './style/navbar.module.css';
 
 export const metadata: Metadata = {
@@ -37,8 +38,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main>{children}</main>
+          <TRPCProvider>
+            <Navbar />
+            <main>{children}</main>
+          </TRPCProvider>
         </ThemeProvider>
       </body>
     </html>

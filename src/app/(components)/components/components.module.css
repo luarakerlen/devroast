@@ -89,3 +89,15 @@
   align-items: center;
   gap: 72px;
 }
+
+.cardRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.tableRowContainer {
+  width: 100%;
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+}
