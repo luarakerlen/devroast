@@ -1,152 +1,116 @@
-# UI Components Pattern Guide
+# UI Components - Padrões e Convenções
 
-## Overview
+## Visão Geral
 
-This document outlines the patterns and conventions for creating UI components in this project.
+Componentes reutilizáveis da interface, localizados em `src/components/ui/`.
+
+## Estrutura de Arquivos
+
+Cada componente em sua própria pasta:
+
+```
+src/components/ui/
+├── button/
+│   ├── button.tsx
+│   └── button.module.css
+├── badge/
+│   ├── badge.tsx
+│   └── badge.module.css
+```
 
 ## Tech Stack
 
-- **Styling**: Tailwind CSS
-- **Variants**: [tailwind-variants](https://tailwind-variants.org)
-- **Utilities**: clsx (for conditional classes)
-- **Framework**: React with TypeScript
-- **Next.js**: App Router with `@/*` import alias
+- **Estilização**: CSS Modules
+- **Framework**: React com TypeScript
+- **Imports**: `@/*` path alias
 
-## Component Structure
+## Padrões
 
-All UI components are located in `src/components/ui/`.
+### 1. Nome de Arquivos
 
-### File Naming
+- Usar kebab-case: `button.tsx`, `card.tsx`
+- Um componente por arquivo
+- Exports nomeados (preferir `export function`)
 
-- Use kebab-case: `button.tsx`, `input.tsx`, `card.tsx`
-- One component per file
-- Named exports only (never default exports)
+### 2. CSS Modules
 
-### Component Template
+```css
+/* Nome do arquivo: component.module.css */
 
-```tsx
-import { tv, type VariantProps } from "tailwind-variants";
-import * as React from "react";
-
-const componentName = tv(
-  {
-    base: "base classes shared across all variants",
-    variants: {
-      variant: {
-        default: "classes for default variant",
-        secondary: "classes for secondary variant",
-        outline: "classes for outline variant",
-      },
-      size: {
-        sm: "classes for small size",
-        md: "classes for medium size",
-        lg: "classes for large size",
-      },
-    },
-    compoundVariants: [
-      {
-        variant: "default",
-        size: "lg",
-        className: "classes applied when both conditions are true",
-      },
-    ],
-    defaultVariants: {
-      variant: "default",
-      size: "md",
-    },
-  },
-  {
-    twMerge: false, // Required when using tailwind-variants
-  }
-);
-
-export interface ComponentNameProps
-  extends React.ElementRef<"element-type">,
-    VariantProps<typeof componentName> {
-  // Additional custom props
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
-const ComponentName = React.forwardRef<
-  HTMLButtonElement,
-  ComponentNameProps
->(({ className, variant, size, ...props }, ref) => {
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Usar CSS custom properties para cores */
+.element {
+  background: var(--bg-page);
+  color: var(--text-secondary);
+}
+```
+
+### 3. Template de Componente
+
+```tsx
+// button/button.tsx
+import styles from './button.module.css';
+
+export function Button({ children, className, ...props }: ButtonProps) {
   return (
-    <element-type
-      className={componentName({ variant, size, className })}
-      ref={ref}
-      {...props}
-    />
+    <button className={`${styles.button} ${className ?? ''}`} {...props}>
+      {children}
+    </button>
   );
-});
-ComponentName.displayName = "ComponentName";
-
-export { ComponentName };
+}
 ```
 
-## Key Patterns
+### 4. Compound Components
 
-### 1. Use tailwind-variants (NOT twMerge)
+Componentes com partes reutilizáveis usam padrão de composição:
 
 ```tsx
-// ✅ CORRECT - Use tailwind-variants
-import { tv, type VariantProps } from "tailwind-variants";
+// badge/badge.tsx
+export function BadgeRoot({ children, className }: BadgeProps) {
+  return <span className={`${styles.root} ${className}`}>{children}</span>;
+}
 
-const button = tv({
-  base: "...",
-  variants: { ... },
-}, { twMerge: false });
+export function BadgeDot() {
+  return <span className={styles.dot} />;
+}
 
-// ❌ WRONG - Don't use twMerge for variant classes
-import { twMerge } from "tailwind-merge";
+export function BadgeLabel({ children }: { children: React.ReactNode }) {
+  return <span className={styles.label}>{children}</span>;
+}
+
+// Uso:
+// <BadgeRoot><BadgeDot /><BadgeLabel>Label</BadgeLabel></BadgeRoot>
 ```
 
-### 2. Extend Native HTML Props
-
-Always extend the appropriate native element props:
+### 5. Imports
 
 ```tsx
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof button> {}
+// ✅ CORRETO - Usar path alias
+import { Button } from '@/components/ui/button';
+import styles from './button.module.css';
 
-export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof input> {}
+// ❌ ERRADO
+import { Button } from '../ui/button';
 ```
 
-### 3. Named Exports Only
+### 6. Props
+
+- Interfaces nomeadas com sufixo `Props`
+- Extender tipos nativos quando apropriado
 
 ```tsx
-// ✅ CORRECT
-export { Button };
-
-// ❌ WRONG
-export default Button;
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary';
+}
 ```
-
-### 4. Import from @/ path
-
-```tsx
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-```
-
-### 5. ForwardRef Pattern
-
-Always use forwardRef for ref forwarding:
-
-```tsx
-const ComponentName = React.forwardRef<HTMLElementType, Props>(
-  ({ className, ...props }, ref) => {
-    return <element-type ref={ref} {...props} />;
-  }
-);
-ComponentName.displayName = "ComponentName";
-```
-
-## Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run check` - Run Biome linter/formatter
-- `npm run format` - Format code with Biome
