@@ -1,3 +1,5 @@
+import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { BadgeDot, BadgeLabel, BadgeRoot } from '@/components/ui/badge/badge';
 import { Button } from '@/components/ui/button/button';
 import {
@@ -13,6 +15,7 @@ import {
   CodeBlockRoot,
 } from '@/components/ui/code-block/code-block';
 import { ScoreRing } from '@/components/ui/score-ring/score-ring';
+import { createCaller, createContext } from '~/server/trpc/caller';
 import styles from './roast.module.css';
 
 export const metadata = {
@@ -20,71 +23,33 @@ export const metadata = {
   description: 'Your code roast result',
 };
 
-const roastData = {
-  id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-  score: 3.5,
-  verdict: 'needs_serious_help',
-  quote:
-    'this code looks like it was written during a power outage... in 2005.',
-  language: 'JavaScript',
-  lines: 7,
-  submittedCode: `function processData(data) {
-  if (data) {
-    if (data.value) {
-      return data.value;
-    }
-  }
-  return null;
-}`,
-  issues: [
-    {
-      title: 'Nested Conditionals',
-      description:
-        'Deeply nested if statements make the code hard to read and maintain.',
-      severity: 'high',
-    },
-    {
-      title: 'Null Handling',
-      description:
-        'Using null instead of proper error handling or optional chaining.',
-      severity: 'medium',
-    },
-    {
-      title: 'No Type Safety',
-      description: 'Lack of TypeScript types makes refactoring risky.',
-      severity: 'medium',
-    },
-    {
-      title: 'Magic Return',
-      description: 'Returning null silently without logging or throwing.',
-      severity: 'low',
-    },
-  ],
-  suggestedFix: `function processData(data) {
-  if (!data?.value) {
-    console.warn('Invalid data provided');
-    return null;
-  }
-  return data.value;
-}`,
-};
+interface RoastPageProps {
+  params: Promise<{ id: string }>;
+}
 
-export default function RoastResultPage() {
+async function RoastContent({ id }: { id: string }) {
+  const caller = createCaller(await createContext());
+  const roast = await caller.roast.getById({ id });
+
+  if (!roast) {
+    notFound();
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.scoreHero}>
-        <ScoreRing score={roastData.score} className={styles.scoreRing} />
+        <ScoreRing score={roast.score} className={styles.scoreRing} />
 
         <div className={styles.roastSummary}>
           <BadgeRoot variant="critical" className={styles.roastBadge}>
             <BadgeDot variant="critical" />
-            <BadgeLabel>verdict: {roastData.verdict}</BadgeLabel>
+            <BadgeLabel>verdict: {roast.verdict}</BadgeLabel>
           </BadgeRoot>
-          <h1 className={styles.roastTitle}>"{roastData.quote}"</h1>
+          <h1 className={styles.roastTitle}>"{roast.quote}"</h1>
           <div className={styles.roastMeta}>
-            <span>lang: {roastData.language}</span>
+            <span>lang: {roast.language}</span>
             <span className={styles.metaDot}>·</span>
-            <span>{roastData.lines} lines</span>
+            <span>{roast.lineCount} lines</span>
           </div>
           <div className={styles.shareRow}>
             <Button variant="outline" size="sm">
@@ -103,11 +68,13 @@ export default function RoastResultPage() {
         </div>
         <CodeBlockRoot className={styles.codeBlock}>
           <CodeBlockHeader>
-            <CodeBlockFilename>your_code.js</CodeBlockFilename>
+            <CodeBlockFilename>
+              your_code.{roast.language.toLowerCase()}
+            </CodeBlockFilename>
           </CodeBlockHeader>
           <CodeBlockContent
-            code={roastData.submittedCode}
-            language={roastData.language.toLowerCase()}
+            code={roast.code}
+            language={roast.language.toLowerCase()}
           />
         </CodeBlockRoot>
       </div>
@@ -120,8 +87,8 @@ export default function RoastResultPage() {
           <span className={styles.titleText}>detailed_analysis</span>
         </div>
         <div className={styles.issuesGrid}>
-          {roastData.issues.map((issue) => (
-            <CardRoot key={issue.title}>
+          {roast.analysis.map((issue) => (
+            <CardRoot key={`${issue.type}-${issue.lineNumber}`}>
               <CardHeader
                 variant={
                   issue.severity === 'high'
@@ -145,18 +112,48 @@ export default function RoastResultPage() {
       <div className={styles.section}>
         <div className={styles.sectionTitle}>
           <span className={styles.titlePrompt}>{'//'}</span>
-          <span className={styles.titleText}>suggested_fix</span>
+          <span className={styles.titleText}>meta_info</span>
         </div>
-        <CodeBlockRoot className={styles.codeBlock}>
-          <CodeBlockHeader>
-            <CodeBlockFilename>improved_code.js</CodeBlockFilename>
-          </CodeBlockHeader>
-          <CodeBlockContent
-            code={roastData.suggestedFix}
-            language={roastData.language.toLowerCase()}
-          />
-        </CodeBlockRoot>
+        <div className={styles.metaGrid}>
+          <div className={styles.metaItem}>
+            <span className={styles.metaLabel}>mode:</span>
+            <span className={styles.metaValue}>{roast.mode}</span>
+          </div>
+          <div className={styles.metaItem}>
+            <span className={styles.metaLabel}>provider:</span>
+            <span className={styles.metaValue}>{roast.provider}</span>
+          </div>
+          <div className={styles.metaItem}>
+            <span className={styles.metaLabel}>model:</span>
+            <span className={styles.metaValue}>{roast.model}</span>
+          </div>
+        </div>
       </div>
     </div>
+  );
+}
+
+function RoastSkeleton() {
+  return (
+    <div className={styles.container}>
+      <div className={styles.scoreHero}>
+        <div className={`${styles.skeleton} ${styles.skeletonScoreRing}`} />
+        <div className={styles.roastSummary}>
+          <div className={`${styles.skeleton} ${styles.skeletonBadge}`} />
+          <div className={`${styles.skeleton} ${styles.skeletonTitle}`} />
+          <div className={`${styles.skeleton} ${styles.skeletonMeta}`} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default async function RoastResultPage({ params }: RoastPageProps) {
+  const { id } = await params;
+
+  return (
+    <Suspense fallback={<RoastSkeleton />}>
+      <RoastContent id={id} />
+    </Suspense>
   );
 }

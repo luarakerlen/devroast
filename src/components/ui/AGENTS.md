@@ -114,3 +114,24 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: 'primary' | 'secondary';
 }
 ```
+
+### 7. Base-UI Primitivos
+
+Usar `@base-ui/react` para primitivos de UI:
+
+```tsx
+import { Collapsible } from '@base-ui/react';
+
+function CollapsibleExample() {
+  return (
+    <Collapsible.Root className={styles.collapsible}>
+      <Collapsible.Trigger className={styles.trigger}>
+        Click to expand
+      </Collapsible.Trigger>
+      <Collapsible.Panel className={styles.panel}>
+        Hidden content here
+      </Collapsible.Panel>
+    </Collapsible.Root>
+  );
+}
+```

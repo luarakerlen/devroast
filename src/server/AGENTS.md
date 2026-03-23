@@ -50,8 +50,10 @@ import { baseProcedure, createTRPCRouter } from '../init';
 
 export const metricsRouter = createTRPCRouter({
   getStats: baseProcedure.query(async () => {
-    const [totalResult] = await db.select({ count: count() }).from(roasts);
-    const [avgResult] = await db.select({ avg: avg(roasts.score) }).from(roasts);
+    const [[totalResult], [avgResult]] = await Promise.all([
+      db.select({ count: count() }).from(roasts),
+      db.select({ avg: avg(roasts.score) }).from(roasts),
+    ]);
 
     return {
       totalRoasted: totalResult?.count ?? 0,
@@ -59,6 +61,22 @@ export const metricsRouter = createTRPCRouter({
     };
   }),
 });
+```
+
+### 2.1 Queries Paralelas
+
+Sempre usar `Promise.all` para executar queries independentes em paralelo:
+
+```typescript
+// ✅ CORRETO - Queries executam em paralelo
+const [results, [totalResult]] = await Promise.all([
+  db.select({ ... }).from(table1).limit(3),
+  db.select({ count: count() }).from(table2),
+]);
+
+// ❌ ERRADO - Queries executam sequencialmente
+const results = await db.select({ ... }).from(table1);
+const [totalResult] = await db.select({ count: count() }).from(table2);
 ```
 
 ### 3. Registrar no AppRouter

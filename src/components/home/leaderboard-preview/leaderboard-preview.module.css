@@ -54,80 +54,169 @@
   color: var(--text-tertiary);
 }
 
-.table {
-  border: 1px solid var(--border-primary);
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-.tableHeader {
-  height: 40px;
-  background-color: var(--bg-surface);
+.rowContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rowMeta {
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--border-primary);
+  gap: 24px;
+  padding: 0 4px;
 }
 
-.headerCell {
+.rowRank {
   font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--text-secondary);
-}
-
-.headerRank {
-  width: 50px;
-}
-
-.headerScore {
-  width: 70px;
-}
-
-.headerCode {
-  flex: 1;
-}
-
-.headerLang {
-  width: 100px;
-}
-
-.tableRow {
-  display: flex;
-  align-items: center;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--border-primary);
-}
-
-.tableRow:last-child {
-  border-bottom: none;
-}
-
-.cell {
-  font-family: var(--font-mono);
-  font-size: 12px;
-}
-
-.cellRank {
-  width: 50px;
-  color: var(--accent-green);
+  font-size: 14px;
   font-weight: 700;
+  color: var(--accent-green);
+  min-width: 40px;
 }
 
-.cellScore {
-  width: 70px;
+.rowScore {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 700;
   color: var(--accent-red);
+  min-width: 40px;
 }
 
-.cellCode {
-  flex: 1;
-  color: var(--text-primary);
-}
-
-.cellLang {
-  width: 100px;
+.rowLang {
+  font-family: var(--font-mono);
+  font-size: 12px;
   color: var(--text-secondary);
+}
+
+.codeSection {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.codeBlockWrapper {
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.codeHeader {
+  height: 40px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--border-primary);
+  background-color: var(--bg-input);
+}
+
+.codeDots {
+  display: flex;
+  gap: 8px;
+}
+
+.dotRed,
+.dotYellow,
+.dotGreen {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.dotRed {
+  background-color: var(--accent-red);
+}
+
+.dotYellow {
+  background-color: var(--accent-amber);
+}
+
+.dotGreen {
+  background-color: var(--accent-green);
+}
+
+.codeContent {
+  background-color: var(--bg-input);
+  padding: 12px;
+  margin: 0;
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.codeContent code {
+  font-family: inherit;
+}
+
+.filename {
+  flex: 1;
+}
+
+.actionsRow {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 4px;
+}
+
+.expandButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  transition: color 0.15s;
+}
+
+.expandButton:hover {
+  color: var(--text-secondary);
+}
+
+.expandIcon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.2s ease;
+}
+
+.expandIcon.expanded {
+  transform: rotate(180deg);
+}
+
+.viewAnalysisLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.viewAnalysisLink:hover {
+  color: var(--accent-green);
+}
+
+.externalIcon {
+  width: 14px;
+  height: 14px;
 }
 
 .footer {
-  padding: 12px 16px;
+  padding: 12px 4px;
 }
 
 .footerLink {
@@ -140,4 +229,53 @@
 
 .footerLink:hover {
   color: var(--text-secondary);
+}
+
+/* Skeleton */
+.skeleton {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonMeta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 4px;
+}
+
+.skeletonRank {
+  width: 40px;
+  height: 16px;
+}
+
+.skeletonScore {
+  width: 40px;
+  height: 16px;
+}
+
+.skeletonLang {
+  width: 80px;
+  height: 14px;
+}
+
+.skeletonCodeBlock {
+  width: 100%;
+  height: 100px;
+}
+
+.skeletonFooter {
+  width: 200px;
+  height: 14px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
 }

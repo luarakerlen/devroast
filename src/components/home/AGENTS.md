@@ -140,3 +140,46 @@ export function FooterHint() {
   );
 }
 ```
+
+### 4. Collapsible com CodeBlock
+
+Para componentes com código expansível (ex: LeaderboardPreview):
+
+```tsx
+// leaderboard-row.tsx (Client Component)
+'use client';
+
+import { Collapsible } from '@base-ui/react';
+import { ChevronDown } from 'lucide-react';
+import {
+  CodeBlockContent,
+  CodeBlockFilename,
+  CodeBlockHeader,
+  CodeBlockRoot,
+} from '@/components/ui/code-block/code-block';
+import styles from './component.module.css';
+
+export function LeaderboardRow({ code, filename, language }: Props) {
+  return (
+    <Collapsible.Root className={styles.collapsible}>
+      <Collapsible.Trigger className={styles.trigger}>
+        <CodeBlockRoot className={styles.codeBlock}>
+          <CodeBlockHeader>
+            <CodeBlockFilename>{filename}</CodeBlockFilename>
+          </CodeBlockHeader>
+          <CodeBlockContent code={code} language={language} />
+        </CodeBlockRoot>
+        <ChevronDown className={styles.icon} />
+      </Collapsible.Trigger>
+      <Collapsible.Panel className={styles.panel}>
+        <CodeBlockRoot>
+          <CodeBlockHeader>
+            <CodeBlockFilename>{filename}</CodeBlockFilename>
+          </CodeBlockHeader>
+          <CodeBlockContent code={code} language={language} />
+        </CodeBlockRoot>
+      </Collapsible.Panel>
+    </Collapsible.Root>
+  );
+}
+```

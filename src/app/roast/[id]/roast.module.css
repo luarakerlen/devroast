@@ -97,3 +97,62 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
 }
+
+.metaGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.metaItem {
+  display: flex;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.metaLabel {
+  color: var(--text-tertiary);
+}
+
+.metaValue {
+  color: var(--text-secondary);
+}
+
+.skeleton {
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.skeletonScoreRing {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+}
+
+.skeletonBadge {
+  width: 180px;
+  height: 24px;
+}
+
+.skeletonTitle {
+  width: 100%;
+  max-width: 500px;
+  height: 28px;
+}
+
+.skeletonMeta {
+  width: 150px;
+  height: 16px;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
