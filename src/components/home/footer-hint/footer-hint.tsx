@@ -4,6 +4,7 @@ import { createCaller, createContext } from '~/server/trpc/caller';
 import styles from './footer-hint.module.css';
 
 async function FooterHintServer() {
+  'use cache';
   const caller = createCaller(await createContext());
   const stats = await caller.metrics.getStats();
   return <FooterHintContent {...stats} />;

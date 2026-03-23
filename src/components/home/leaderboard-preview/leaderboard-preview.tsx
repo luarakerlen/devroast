@@ -2,9 +2,12 @@ import NumberFlow from '@number-flow/react';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { Button } from '@/components/ui/button/button';
+import {
+  LeaderboardRow,
+  LeaderboardRowSkeleton,
+} from '@/components/ui/leaderboard-row/leaderboard-row';
 import { createCaller, createContext } from '~/server/trpc/caller';
 import styles from './leaderboard-preview.module.css';
-import { LeaderboardRow } from './leaderboard-row';
 
 interface LeaderboardItem {
   rank: number;
@@ -15,7 +18,14 @@ interface LeaderboardItem {
   language: string;
 }
 
+function getPreviewCode(code: string): string {
+  const lines = code.split('\n');
+  if (lines.length <= 3) return code;
+  return lines.slice(0, 3).join('\n');
+}
+
 async function LeaderboardServer() {
+  'use cache';
   const caller = createCaller(await createContext());
   const { items, totalCount } = await caller.leaderboard.getTopShame();
   return <LeaderboardContent items={items} totalCount={totalCount} />;
@@ -46,22 +56,18 @@ function LeaderboardContent({
       </span>
 
       <div className={styles.list}>
-        {items.map((item) => {
-          const previewCode = item.code.split('\n').slice(0, 3).join('\n');
-          return (
-            <div key={item.id} className={styles.rowWrapper}>
-              <LeaderboardRow
-                rank={item.rank}
-                id={item.id}
-                score={item.score}
-                code={item.code}
-                previewCode={previewCode}
-                filename={item.filename}
-                language={item.language}
-              />
-            </div>
-          );
-        })}
+        {items.map((item) => (
+          <LeaderboardRow
+            key={item.id}
+            rank={item.rank}
+            id={item.id}
+            score={item.score}
+            code={item.code}
+            previewCode={getPreviewCode(item.code)}
+            filename={item.filename}
+            language={item.language}
+          />
+        ))}
       </div>
 
       <div className={styles.footer}>
@@ -91,15 +97,8 @@ export function LeaderboardPreviewSkeleton() {
       </span>
 
       <div className={styles.list}>
-        {[1, 2, 3].map((i) => (
-          <div key={i} className={styles.rowContainer}>
-            <div className={styles.skeletonMeta}>
-              <span className={`${styles.skeleton} ${styles.skeletonRank}`} />
-              <span className={`${styles.skeleton} ${styles.skeletonScore}`} />
-              <span className={`${styles.skeleton} ${styles.skeletonLang}`} />
-            </div>
-            <div className={`${styles.skeleton} ${styles.skeletonCodeBlock}`} />
-          </div>
+        {(['a', 'b', 'c'] as const).map((key) => (
+          <LeaderboardRowSkeleton key={key} />
         ))}
       </div>
 

@@ -3,14 +3,25 @@
 import { ChevronDown, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
-import styles from './leaderboard-preview.module.css';
+import styles from './leaderboard-row.module.css';
 
-interface ExpandButtonProps {
-  isExpanded: boolean;
-  onToggle: () => void;
+interface LeaderboardRowProps {
+  rank: number;
+  id: string;
+  score: number;
+  code: string;
+  previewCode: string;
+  filename: string;
+  language: string;
 }
 
-function ExpandButton({ isExpanded, onToggle }: ExpandButtonProps) {
+function ExpandButton({
+  isExpanded,
+  onToggle,
+}: {
+  isExpanded: boolean;
+  onToggle: () => void;
+}) {
   return (
     <button type="button" className={styles.expandButton} onClick={onToggle}>
       <ChevronDown
@@ -21,14 +32,28 @@ function ExpandButton({ isExpanded, onToggle }: ExpandButtonProps) {
   );
 }
 
-interface LeaderboardRowProps {
-  rank: number;
-  id: string;
-  score: number;
+function CodeBlockDisplay({
+  code,
+  filename,
+}: {
   code: string;
-  previewCode: string;
   filename: string;
-  language: string;
+}) {
+  return (
+    <div className={styles.codeBlockWrapper}>
+      <div className={styles.codeHeader}>
+        <div className={styles.codeDots}>
+          <span className={styles.dotRed} />
+          <span className={styles.dotYellow} />
+          <span className={styles.dotGreen} />
+        </div>
+        <span className={styles.filename}>{filename}</span>
+      </div>
+      <pre className={styles.codeContent}>
+        <code>{code}</code>
+      </pre>
+    </div>
+  );
 }
 
 export function LeaderboardRow({
@@ -71,25 +96,15 @@ export function LeaderboardRow({
   );
 }
 
-interface CodeBlockDisplayProps {
-  code: string;
-  filename: string;
-}
-
-function CodeBlockDisplay({ code, filename }: CodeBlockDisplayProps) {
+export function LeaderboardRowSkeleton() {
   return (
-    <div className={styles.codeBlockWrapper}>
-      <div className={styles.codeHeader}>
-        <div className={styles.codeDots}>
-          <span className={styles.dotRed} />
-          <span className={styles.dotYellow} />
-          <span className={styles.dotGreen} />
-        </div>
-        <span className={styles.filename}>{filename}</span>
+    <div className={styles.rowContainer}>
+      <div className={styles.skeletonMeta}>
+        <span className={`${styles.skeleton} ${styles.skeletonRank}`} />
+        <span className={`${styles.skeleton} ${styles.skeletonScore}`} />
+        <span className={`${styles.skeleton} ${styles.skeletonLang}`} />
       </div>
-      <pre className={styles.codeContent}>
-        <code>{code}</code>
-      </pre>
+      <div className={`${styles.skeleton} ${styles.skeletonCodeBlock}`} />
     </div>
   );
 }

@@ -98,6 +98,54 @@ export const leaderboardRouter = createTRPCRouter({
       };
     }
   }),
+
+  getAll: baseProcedure
+    .input(
+      z.object({
+        offset: z.number().default(0),
+        limit: z.number().default(20),
+      })
+    )
+    .query(async ({ input }) => {
+      try {
+        const { offset, limit } = input;
+        const [results, [totalResult]] = await Promise.all([
+          db
+            .select({
+              id: roasts.id,
+              score: roasts.score,
+              language: roasts.language,
+              code: roasts.code,
+            })
+            .from(roasts)
+            .orderBy(asc(roasts.score))
+            .limit(limit)
+            .offset(offset),
+          db.select({ count: count() }).from(roasts),
+        ]);
+
+        const totalCount = totalResult?.count ?? 0;
+
+        return {
+          items: results.map((r, index) => ({
+            rank: offset + index + 1,
+            id: r.id,
+            score: r.score / 10,
+            code: r.code,
+            filename: getRandomFilename(r.language),
+            language: r.language.charAt(0).toUpperCase() + r.language.slice(1),
+          })),
+          totalCount,
+          hasMore: offset + limit < totalCount,
+        };
+      } catch {
+        return {
+          items: [],
+          totalCount: 0,
+          hasMore: false,
+        };
+      }
+    }),
 });
 
 export const roastRouter = createTRPCRouter({
